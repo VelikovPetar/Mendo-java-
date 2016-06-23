@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
  */
 public class Cifri {
 
-    public static int getMax(String s) {
+    private static int getMax(String s) {
         int maxIndex = 0;
         for(int i = 1; i < s.length(); ++i) {
             if(s.charAt(i) > s.charAt(maxIndex)) {
@@ -18,7 +18,7 @@ public class Cifri {
         }
         return maxIndex;
     }
-    public static String build(String s, int k) {
+    private static String build(String s, int k) {
         if(k == 0) {
             return s;
         }
@@ -33,14 +33,23 @@ public class Cifri {
     }
 
     public static void main(String[] args) {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br = null;
         try {
+            br = new BufferedReader(new InputStreamReader(System.in));
             String line = br.readLine();
             String[] part = line.split("\\s+");
             int k = Integer.parseInt(part[1]);
             System.out.println(build(part[0], k));
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if(br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

@@ -27,8 +27,9 @@ class Krava implements Comparable<Krava> {
 public class Izbori {
 
     public static void main(String[] args) {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br = null;
         try {
+            br = new BufferedReader(new InputStreamReader(System.in));
             String line = br.readLine();
             String[] info = line.split("\\s+");
             int n = Integer.parseInt(info[0]);
@@ -52,6 +53,14 @@ public class Izbori {
             System.out.println(index);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if(br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
