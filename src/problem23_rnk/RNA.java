@@ -47,6 +47,10 @@ class Graph {
         }
     }
 }
+
+/**
+ * TODO: Works on 5/10 test cases
+ */
 public class RNA {
 
     static char[] sequence;
@@ -90,9 +94,35 @@ public class RNA {
     }
 
     static int getInRange(int start, int end) {
-        if(end - start < 2) return 0;
-        if(canBond(sequence[start], sequence[end])) return 1 + getInRange(start + 1, end - 1);
-        else return Math.max(getInRange(start, end - 1), getInRange(start + 1, end));
+        if(end - start < 2) {
+            if(end > start) return getInRange(end, start);
+            if(end > memo.length - 1 || start < 0 || end < 0 || start > memo.length - 1) return 0;
+            return memo[start][end];
+        }
+        if(memo[start][end] != 0) {
+            return memo[start][end];
+        }
+        int p1;
+        if(memo[start+1][end-1] == 0) {
+            memo[start + 1][end - 1] = getInRange(start + 1, end - 1);
+        }
+        p1 = memo[start + 1][end - 1];
+        if(canBond(sequence[start], sequence[end])) {
+            p1 = memo[start][end] = memo[start + 1][end - 1] + 1;
+        }
+        int p2;
+        if(memo[start+1][end] == 0) {
+            memo[start + 1][end] = getInRange(start + 1, end);
+        }
+        p2 = memo[start + 1][end];
+        int p3;
+        if(memo[start][end - 1] == 0) {
+            memo[start][end - 1] = getInRange(start, end - 1);
+        }
+        p3 = memo[start][end - 1];
+        memo[start][end] = Math.max(p1, Math.max(p2, p3));
+        return memo[start][end];
+
     }
 
     public static void main(String[] args) {
@@ -104,46 +134,24 @@ public class RNA {
             sequence = input.toCharArray();
             memo = new int[l][l];
             // TODO
-            int[][] pairs = new int[l][l];
-            for(int i = 0; i < l; ++i)  {
-                for(int j = 0; j < l; ++j) {
-                    if(Math.abs(i - j) < 2) continue;
-                    if(canBond(sequence[i], sequence[j])) {
-                        pairs[i][j] = 1;
+            int maxBonds = 0;
+            Interval mm = new Interval(0, l-1);
+            for(int start = 0; start < l; ++start) {
+                for(int end = l - 1; end >= 0; --end) {
+                    int tmp = getInRange(start, end);
+                    if(tmp > maxBonds) {
+                        maxBonds = tmp;
+                        mm = new Interval(start, end);
                     }
                 }
             }
+            System.out.println(getInRange(0, mm.start - 1) + getInRange(mm.start, mm.end) + getInRange(mm.end + 1, l-1));
 //            for(int i = 0; i < l; ++i)  {
 //                for(int j = 0; j < l; ++j) {
-//                    System.out.print(pairs[i][j] + "\t");
+//                    System.out.print(memo[i][j] + "\t");
 //                }
 //                System.out.println();
 //            }
-            int[][] D = new int[l][l];
-            for(int i = 2; i < l; ++i) {
-                if(canBond(sequence[0], sequence[i])) {
-                    D[0][i] = D[i][0] = 1;
-                }
-            }
-            for(int i = 1; i < l; ++i) {
-                for(int j = 1; j < l; ++j) {
-                    if(Math.abs(i - j) < 2) continue;
-                    if(i > j) D[i][j] = D[j][i];
-                    if(canBond(sequence[i], sequence[j])) {
-                        D[i][j] = D[i - 1][j - 1] + 1;
-                    } else {
-                        D[i][j] = D[i - 1][j - 1];
-                    }
-                }
-            }
-            int maxBonds = 0;
-            for(int start = 0; start < l; ++start) {
-                List<Interval> intervals = getIntervalsFrom(start, l);
-                for(Interval i : intervals) {
-                    maxBonds = Math.max(maxBonds, getInRange(i.start, i.end));
-                }
-            }
-            System.out.print(maxBonds);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
