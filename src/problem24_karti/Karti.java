@@ -7,7 +7,7 @@ import java.util.*;
  */
 
 /**
- * TODO: Doesn't work with BFS
+ * TODO: To bo solved without BFS
  */
 public class Karti {
 

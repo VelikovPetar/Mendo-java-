@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
  */
 
 /**
- * TODO: Works on 5/10 test cases
+ * TODO: Works on 6/10 test cases
  */
 public class RNA {
 

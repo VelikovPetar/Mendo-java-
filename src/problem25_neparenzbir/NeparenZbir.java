@@ -13,8 +13,9 @@ public class NeparenZbir {
         int y = in.nextInt();
         long sum = 0;
         for(int i = x; i <= y; ++i) {
-            if(i % 2 == 1)
+            if(i % 2 == 1) {
                 sum += i;
+            }
         }
         System.out.println(sum);
     }
