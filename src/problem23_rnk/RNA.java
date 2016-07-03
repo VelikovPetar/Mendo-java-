@@ -8,9 +8,6 @@ import java.io.InputStreamReader;
  * Created by petar on 6/30/16.
  */
 
-/**
- * TODO: Works on 6/10 test cases
- */
 public class RNA {
 
     private static char[] sequence;
@@ -27,36 +24,26 @@ public class RNA {
     }
 
     private static long getInRange(int start, int end) {
-        if(start >= end) return 0;
+        if(end >= memo.length || start >= memo.length) {
+            return 0;
+        }
+        if(memo[start][end] != -1) {
+            return memo[start][end];
+        }
         if(end - start < 2) {
-            if(end > start) return getInRange(end, start);
-            if(end > memo.length - 1 || start < 0 || end < 0 || start > memo.length - 1) return 0;
-            return memo[start][end];
+            memo[start][end] = 0;
+            return 0;
         }
-        if(memo[start][end] != 0) {
-            return memo[start][end];
+        long max = 0;
+        max = getInRange(start + 1, end);
+        for(int i = 2; i < end - start + 1; ++i) {
+            if(canBond(sequence[start], sequence[start + i])) {
+                long tmp = getInRange(start + 1, start + i - 1) + getInRange(start + i + 1, end) + 1;
+                max = Math.max(max, tmp);
+            }
         }
-        long p1;
-        if(memo[start+1][end-1] == 0) {
-            memo[start + 1][end - 1] = getInRange(start + 1, end - 1);
-        }
-        p1 = memo[start + 1][end - 1];
-        if(canBond(sequence[start], sequence[end])) {
-            p1 = memo[start][end] = memo[start + 1][end - 1] + 1;
-        }
-        long p2;
-        if(memo[start+1][end] == 0) {
-            memo[start + 1][end] = getInRange(start + 1, end);
-        }
-        p2 = memo[start + 1][end];
-        long p3;
-        if(memo[start][end - 1] == 0) {
-            memo[start][end - 1] = getInRange(start, end - 1);
-        }
-        p3 = memo[start][end - 1];
-        memo[start][end] = Math.max(p1, Math.max(p2, p3));
-        return memo[start][end];
-
+        memo[start][end] = max;
+        return max;
     }
 
     public static void main(String[] args) {
@@ -67,19 +54,12 @@ public class RNA {
             String input = br.readLine();
             sequence = input.toCharArray();
             memo = new long[l][l];
-            // TODO
-            long maxBonds = 0;
-            for(int start = 0; start < l; ++start) {
-                for(int end = l - 1; end >= 0; --end) {
-                    long tmp;
-                    if(end <= start) tmp = 0;
-                    else tmp = getInRange(0, start - 1) + getInRange(start, end) + getInRange(end + 1, l - 1);
-                    if(tmp > maxBonds) {
-                        maxBonds = tmp;
-                    }
+            for(int i = 0; i < l; ++i) {
+                for(int j = 0; j < l; ++j) {
+                    memo[i][j] = -1;
                 }
             }
-            System.out.println(maxBonds);
+            System.out.println(getInRange(0, l - 1));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
