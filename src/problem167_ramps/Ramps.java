@@ -14,7 +14,7 @@ class Ramp {
     int distance;
     int interval;
 
-    public Ramp(int distance, int interval) {
+    Ramp(int distance, int interval) {
         this.distance = distance;
         this.interval = interval;
     }
