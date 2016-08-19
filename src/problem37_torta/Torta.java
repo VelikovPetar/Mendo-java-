@@ -14,6 +14,7 @@ class Egg {
         this.pack = pack;
     }
 }
+
 public class Torta {
 
     static Egg[] eggs;
