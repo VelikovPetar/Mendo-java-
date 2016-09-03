@@ -1,4 +1,4 @@
-package problem_141_magicforest;
+package problem141_magicforest;
 
 import java.io.BufferedReader;
 import java.io.IOException;

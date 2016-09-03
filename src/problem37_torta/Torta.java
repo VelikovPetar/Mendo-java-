@@ -23,6 +23,7 @@ public class Torta {
         int minSinglePrice = Integer.MAX_VALUE;
         int minPackPrice = Integer.MAX_VALUE;
         for(int i = 0; i < eggs.length; ++i) {
+
             minSinglePrice = Math.min(minSinglePrice, eggs[i].single);
             minPackPrice = Math.min(minPackPrice, eggs[i].pack);
         }
