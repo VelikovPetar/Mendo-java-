@@ -93,14 +93,6 @@ public class LetenKamp {
         }
     }
 
-    public static long add(long a, long b) {
-        if(a == INF || b == INF) {
-            return INF;
-        } else {
-            return a + b;
-        }
-    }
-
     private static long tsp(int n) {
         int S = 1 << n;
         dp = new long[n][S];
@@ -144,7 +136,7 @@ public class LetenKamp {
         for(int i = 0; i < N; ++i) {
             v[i] = new Vertex(i);
         }
-        List<Edge> [] es = new ArrayList[N];
+        ArrayList[] es = new ArrayList[N];
         for(int i = 0; i < N; ++i) {
             es[i] = new ArrayList<>();
         }
